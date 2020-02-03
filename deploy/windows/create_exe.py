@@ -7,7 +7,6 @@ import sys
 shutil.copy('docs/favicon.ico', '.')
 shutil.copy('deploy/windows/instaloader.spec', '.')
 shutil.unpack_archive('deploy/windows/ps', '.', 'xztar')
-shutil.copy('instaloader/__main__.py', '.')
 
 code = """
 import psutil
@@ -39,7 +38,7 @@ if __name__ == "__main__":
     __main()
 """
 
-with open('__main__.py', 'r+') as f:
+with open('instaloader/__main__.py', 'r') as f:
     # adjust imports for changed file structure
     regex = re.compile(r'from (?:(\.[^ ]+ )|\.( ))import')
     lines = [regex.sub(r'from instaloader\1\2import', line) for line in f.readlines()]
@@ -54,7 +53,7 @@ with open('__main__.py', 'r+') as f:
             lines.extend(code_lines[i:])
             break
 
-    f.seek(0, 0)
+with open('__main__.py', 'w+') as f:
     f.writelines(lines)
 
 # install dependencies and invoke PyInstaller
