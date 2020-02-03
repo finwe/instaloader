@@ -5,19 +5,23 @@ on: push
 jobs:
   build:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        python-version: [ '3.8' ]
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Instaloader repository
+        uses: actions/checkout@v2
       - name: Setup Python
         uses: actions/setup-python@v1
         with:
           python-version: 3.8
           architecture: x64
-      - run: python deploy/windows/create_exe.py
-
-      - uses: actions/upload-artifact@v1
+      - name: Run custom python script for EXE creation
+        run: python deploy/windows/create_exe.py
+      - name: Upload instaloader EXE artifact
+        uses: actions/upload-artifact@v1
         with:
-          name: Upload artifact
-          path: dist/instaloader.exe
+          name: instaloader-windows-standalone
+          path: dist
+      - name: Upload build artifact for debugging
+        uses: actions/upload-artifact@v1
+        with:
+          name: build
+          path: build
