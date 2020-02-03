@@ -16,3 +16,8 @@ jobs:
           python-version: 3.8
           architecture: x64
       - run: python deploy/windows/create_exe.py
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: Upload artifact
+          path: dist/instaloader.exe
