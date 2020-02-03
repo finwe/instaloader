@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "33408a60fda1a56bf680462fad21643ae0159bc13f3b85d8f10ebf3eef7d8725"
+            "sha256": "a06768842e920c636d0d04028ba283e8bfcb00c90dc6bd8ef85231a1d5c17b74"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -161,6 +161,13 @@
             ],
             "version": "==1.4.3"
         },
+        "macholib": {
+            "hashes": [
+                "sha256:0c436bc847e7b1d9bda0560351bf76d7caf930fb585a828d13608839ef42c432",
+                "sha256:c500f02867515e6c60a27875b408920d18332ddf96b4035ef03beddd782d4281"
+            ],
+            "version": "==1.14"
+        },
         "markupsafe": {
             "hashes": [
                 "sha256:00bc623926325b26bb9605ae9eae8a215691f33cae5df11ca5424f06f2d1f473",
@@ -273,10 +280,10 @@
         },
         "pyinstaller": {
             "hashes": [
-                "sha256:3730fa80d088f8bb7084d32480eb87cbb4ddb64123363763cf8f2a1378c1c4b7"
+                "sha256:a5a6e04a66abfcf8761e89a2ebad937919c6be33a7b8963e1a961b55cb35986b"
             ],
             "index": "pypi",
-            "version": "==3.6"
+            "version": "==3.4"
         },
         "pylint": {
             "hashes": [

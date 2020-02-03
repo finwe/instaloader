@@ -7,7 +7,7 @@ verify_ssl = true
 pylint = "*"
 mypy = "*"
 sphinx = "*"
-pyinstaller = "*"
+pyinstaller = "==3.4"
 pefile = "*"
 pywin32-ctypes = "*"
 psutil = "*"
