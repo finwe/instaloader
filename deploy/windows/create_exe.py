@@ -1,6 +1,7 @@
 import re
 import shutil
 import subprocess
+import sys
 
 # copy the required files into repo root
 shutil.copy('docs/favicon.ico', '.')
@@ -29,7 +30,7 @@ def __main():
     if return_code:
         raise subprocess.CalledProcessError(return_code, ps)
     if pname[0:12] == 'explorer.exe':
-        subprocess.Popen("cmd /K \"{0}\"".format(os.path.splitext(os.path.basename(sys.argv[0]))[0]))
+        subprocess.Popen("cmd /K \\\"{0}\\\"".format(os.path.splitext(os.path.basename(sys.argv[0]))[0]))
     else:
         main()
 
@@ -39,24 +40,34 @@ if __name__ == "__main__":
 """
 
 with open('__main__.py', 'r+') as f:
-    # insert code for magic exe behavior
-    f.seek(0, 2)
-    f.seek(f.tell() - 42, 0)
-    last_lines = f.readlines()
-    index = last_lines.index('if __name__ == "__main__":\n')
-    f.seek(0, 2)
-    f.seek(f.tell() - len(''.join(last_lines[index:])), 0)
-    f.writelines(code)
-
     # adjust imports for changed file structure
-    f.seek(0, 0)
     regex = re.compile(r'from (?:(\.[^ ]+ )|\.( ))import')
     lines = [regex.sub(r'from instaloader\1\2import', line) for line in f.readlines()]
+
+    # insert code for magic exe behavior
+    index = lines.index('if __name__ == "__main__":\n')
+    code_lines = [cl + '\n' for cl in code.splitlines()]
+    for i, code_line in enumerate(code_lines):
+        if i + index < len(lines):
+            lines[i + index] = code_line
+        else:
+            lines.extend(code_lines[i:])
+            break
+
     f.seek(0, 0)
     f.writelines(lines)
 
 # install dependencies and invoke PyInstaller
-subprocess.Popen("pip install pipenv==2018.11.26").wait()
-subprocess.Popen("pipenv sync --dev").wait()
-subprocess.Popen("pipenv run pyinstaller instaloader.spec").wait()
-subprocess.Popen("dir dist").wait()
+commands = ["pip install pipenv==2018.11.26",
+            "pipenv sync --dev",
+            "pipenv run pyinstaller --log-level=DEBUG instaloader.spec"]
+
+for command in commands:
+    print()
+    print('#' * (len(command) + 6))
+    print('## {} ##'.format(command))
+    print('#' * (len(command) + 6))
+    print(flush=True)
+    err = subprocess.Popen(command).wait()
+    if err != 0:
+        sys.exit(err)
