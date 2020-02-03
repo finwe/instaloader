@@ -1,3 +1,4 @@
+import hashlib
 import re
 import shutil
 import subprocess
@@ -70,3 +71,15 @@ for command in commands:
     err = subprocess.Popen(command).wait()
     if err != 0:
         sys.exit(err)
+
+# calculate and store MD5 hash for created executable
+hash_md5 = hashlib.md5()
+with open('dist/instaloader.exe', 'rb') as f:
+    for chunk in iter(lambda: f.read(4096), b''):
+        hash_md5.update(chunk)
+
+with open('dist/instaloader.exe.md5', 'w+') as f:
+    f.write('{} *instaloader.exe\n'.format(hash_md5.hexdigest()))
+
+# include README
+shutil.copy('README.rst', 'dist')
